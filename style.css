@@ -33,6 +33,10 @@ body {
   text-decoration: none;
 }
 
+.nav-links {
+  align-items: center;
+}
+
 .nav-links a {
   margin-left: 2rem;
   color: #e85d4f;
