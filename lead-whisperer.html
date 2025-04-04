@@ -8,16 +8,47 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
-      color: #222;
+      background: #fefefe;
+      color: #2c3e50;
       line-height: 1.6;
     }
 
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      padding: 1rem 2rem;
+      text-align: right;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      color: #e85d4f;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     header {
-      background: #e85d4f;
-      color: white;
-      padding: 2rem 1rem;
+      background: #ffe9e3;
+      color: #2c3e50;
+      padding: 3rem 1rem 2rem;
       text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      margin: 0.3em 0 0.2em;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #555;
     }
 
     main {
@@ -26,37 +57,55 @@
       padding: 2rem 1.5rem;
     }
 
+    main ul {
+      padding-left: 1.2rem;
+    }
+
+    main li {
+      margin-bottom: 0.5rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 85vh;
+      border: 1px solid #ddd;
+      margin-top: 2rem;
+      border-radius: 6px;
+    }
+
     a {
       color: #e85d4f;
       text-decoration: none;
-      font-weight: 500;
     }
 
     a:hover {
       text-decoration: underline;
     }
 
-    iframe {
-      width: 100%;
-      height: 85vh;
-      border: none;
-      margin-top: 2rem;
-    }
-
-    .back {
+    footer {
       text-align: center;
-      padding: 2rem;
+      padding: 2rem 1rem;
       font-size: 0.9rem;
       color: #888;
+      border-top: 1px solid #eee;
     }
   </style>
 </head>
 <body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="lead-whisperer.html">Lead Whisperer App</a>
+  </nav>
+
+  <!-- Hero Section -->
   <header>
     <h1>Lead Whisperer Insights Hub</h1>
     <p>Turn marketing data into sales-ready signals</p>
   </header>
 
+  <!-- Description Section -->
   <main>
     <p>
       The Lead Whisperer Insights Hub helps you uncover hidden sales opportunities from your event and campaign engagement data. Use this interactive dashboard to:
@@ -68,14 +117,15 @@
     </ul>
     <p>
       📺 <a href="https://www.linkedin.com/feed/update/urn:li:activity:7312542011343966208/" target="_blank">
-      Watch the explainer video</a> to see how to make the most of these insights.
+        Watch the explainer video</a> to see how to use this data to power your sales motion.
     </p>
 
-    <iframe src="https://lead-whisperer-insights-hub.lovable.app/" title="Lead Whisperer Insights Dashboard"></iframe>
+    <!-- Embedded App -->
+    <iframe src="https://lead-whisperer-insights-hub.lovable.app/" title="Lead Whisperer Dashboard"></iframe>
   </main>
 
-  <div class="back">
-    <a href="index.html">← Back to Clarity Operator Home</a>
-  </div>
+  <footer>
+    &copy; 2025 Mendy Ezagui · <a href="https://www.linkedin.com/in/mendyezagui/" target="_blank">Connect on LinkedIn</a>
+  </footer>
 </body>
 </html>
