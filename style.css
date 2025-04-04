@@ -53,17 +53,24 @@ body {
   .nav-content {
     flex-direction: column;
     align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .brand {
+    margin-bottom: 0.5rem;
   }
 
   .nav-links {
-    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 
   .nav-links a {
-    display: block;
-    margin: 0.5rem 0 0;
+    margin: 0.25rem 0;
+    font-size: 1rem;
   }
-}
+} 
 
 /* === Hero Section === */
 header.hero {
