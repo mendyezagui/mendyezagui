@@ -43,7 +43,11 @@ body {
 .nav-links a:hover {
   text-decoration: underline;
 }
-
+/* === Logo === */
+.logo {
+  height: 36px;
+  vertical-align: middle;
+}
 /* === Mobile Navigation === */
 @media (max-width: 768px) {
   .nav-content {
