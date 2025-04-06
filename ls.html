@@ -122,17 +122,16 @@
       });
 
     // Rambam Feed from Full Daily Study RSS
-    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/rambam.xml')
-      .then(response => response.json())
-      .then(data => {
-        const list = document.getElementById('rambam-feed');
-        const rambamItems = data.items.filter(item => item.title.toLowerCase().includes("rambam"));
-        rambamItems.forEach(item => {
-          const li = document.createElement('li');
-          li.innerHTML = `<a href="${item.link}" target="_blank">${item.title} - ${item.description}</a>`;
-          list.appendChild(li);
-        });
-      });
+  fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/rambam.xml')
+  .then(response => response.json())
+  .then(data => {
+    const list = document.getElementById('rambam-feed');
+    data.items.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${item.link}" target="_blank">${item.title} - ${item.description}</a>`;
+      list.appendChild(li);
+    });
+  });
 
     // Omer Feed (conditional display)
 
@@ -140,18 +139,23 @@ fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools
   .then(response => response.json())
   .then(data => {
     const today = new Date();
-    const todayStr = today.toDateString();
+    const todayDate = today.getDate();
+    const todayMonth = today.getMonth();
 
     const match = data.items.find(item => {
-      const matchDate = new Date(item.pubDate);
-      return matchDate.toDateString() === todayStr;
+      const itemDate = new Date(item.pubDate);
+      return (
+        itemDate.getDate() === todayDate &&
+        itemDate.getMonth() === todayMonth
+      );
     });
 
-    if (match && match.title.toLowerCase().includes('day')) {
+    if (match && /day \d+/i.test(match.title)) {
       document.getElementById('omer-section').style.display = 'block';
       document.getElementById('omer-count').textContent = match.title;
     }
   });
+
 
     // Candle Lighting (only show on Fridays)
     if (today.getDay() === 5) {
