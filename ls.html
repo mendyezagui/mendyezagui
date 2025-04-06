@@ -124,7 +124,7 @@
       });
 
     // Rambam Feed from Full Daily Study RSS
-    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/dailystudy.xml')
+    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/rambam.xml')
       .then(response => response.json())
       .then(data => {
         const list = document.getElementById('rambam-feed');
@@ -137,19 +137,23 @@
       });
 
     // Omer Feed (conditional display)
-    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
-      .then(response => response.json())
-      .then(data => {
-        const todayOmer = data.items.find(item => {
-          const pubDate = new Date(item.pubDate);
-          const today = new Date();
-          return pubDate.toDateString() === today.toDateString();
-        });
-        if (todayOmer) {
-          document.getElementById('omer-section').style.display = 'block';
-          document.getElementById('omer-count').textContent = todayOmer.title;
-        }
-      });
+
+fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
+  .then(response => response.json())
+  .then(data => {
+    const today = new Date();
+    const todayStr = today.toDateString();
+
+    const match = data.items.find(item => {
+      const matchDate = new Date(item.pubDate);
+      return matchDate.toDateString() === todayStr;
+    });
+
+    if (match && match.title.toLowerCase().includes('day')) {
+      document.getElementById('omer-section').style.display = 'block';
+      document.getElementById('omer-count').textContent = match.title;
+    }
+  });
 
     // Candle Lighting (only show on Fridays)
     if (today.getDay() === 5) {
