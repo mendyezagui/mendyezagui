@@ -79,6 +79,14 @@
       <ul id="rambam-feed"><li>Loading...</li></ul>
     </div>
 
+    <!-- Zmanim Times -->
+<div class="section" id="zmanim-section">
+  <h2>Today's Zmanim</h2>
+  <ul id="zmanim-list">
+    <li>Loading halachic times...</li>
+  </ul>
+</div>
+
     <!-- Omer Counter -->
     <div class="section" id="omer-section" style="display:none;">
       <h2>Omer Counter</h2>
@@ -165,6 +173,32 @@
           document.getElementById('omer-count').textContent = match.title;
         }
       });
+// Zmanim Times: Latest Shema, Sunset, Nightfall
+fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/zmanim.xml?locationId=90035')
+  .then(response => response.json())
+  .then(data => {
+    const zmanimList = document.getElementById('zmanim-list');
+    zmanimList.innerHTML = '';
+
+    const keysToShow = ['Latest Shema', 'Sunset', 'Nightfall'];
+    const matchingItems = data.items.filter(item =>
+      keysToShow.some(key => item.title.toLowerCase().includes(key.toLowerCase()))
+    );
+
+    if (matchingItems.length === 0) {
+      zmanimList.innerHTML = '<li>No zmanim data available.</li>';
+    } else {
+      matchingItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.title;
+        zmanimList.appendChild(li);
+      });
+    }
+  })
+  .catch(err => {
+    document.getElementById('zmanim-list').innerHTML = '<li>Failed to load zmanim data.</li>';
+    console.error('Zmanim feed error:', err);
+  });
 
     // Candle Lighting (only show on Fridays)
     if (today.getDay() === 5) {
