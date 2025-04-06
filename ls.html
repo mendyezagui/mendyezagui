@@ -76,32 +76,17 @@
       <div class="clock" id="clock"></div>
     </div>
 
-<!-- Rambam Daily Study -->
-<div class="section">
-  <h2>Rambam Daily Study</h2>
-  <ul id="rambam-feed"></ul>
-</div>
-
-<script>
-  // Fetch full daily study feed and filter for Rambam items only
-  fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/dailystudy.xml')
-    .then(response => response.json())
-    .then(data => {
-      const list = document.getElementById('rambam-feed');
-      const rambamItems = data.items.filter(item => item.title.toLowerCase().includes("rambam"));
-      rambamItems.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="${item.link}" target="_blank">${item.title} - ${item.description}</a>`;
-        list.appendChild(li);
-      });
-    });
-</script>
+    <!-- Rambam Study -->
+    <div class="section">
+      <h2>Rambam Daily Study</h2>
+      <ul id="rambam-feed"></ul>
+    </div>
 
     <!-- Omer Counter -->
-<div class="section" id="omer-section" style="display:none;">
-  <h2>Omer Counter</h2>
-  <div id="omer-count">Loading...</div>
-</div>
+    <div class="section" id="omer-section" style="display:none;">
+      <h2>Omer Counter</h2>
+      <div id="omer-count">Loading...</div>
+    </div>
 
     <!-- Candle Lighting -->
     <div class="section" id="candle-section" style="display:none;">
@@ -110,7 +95,8 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <div class="footer">Site powered by GitHub Pages • Built with ❤️</div>
+
   <script>
     // 12-hour Clock
     function updateClock() {
@@ -137,33 +123,34 @@
         document.getElementById('hebrew-date').textContent = `${data.hebrew}`;
       });
 
-    // Rambam RSS Feed
-    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/rambam.xml')
+    // Rambam Feed from Full Daily Study RSS
+    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/dailystudy.xml')
       .then(response => response.json())
       .then(data => {
         const list = document.getElementById('rambam-feed');
-        data.items.slice(0, 3).forEach(item => {
+        const rambamItems = data.items.filter(item => item.title.toLowerCase().includes("rambam"));
+        rambamItems.forEach(item => {
           const li = document.createElement('li');
-          li.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
+          li.innerHTML = `<a href="${item.link}" target="_blank">${item.title} - ${item.description}</a>`;
           list.appendChild(li);
         });
       });
 
-// Omer RSS Feed (only show if relevant today)
-fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
-  .then(response => response.json())
-  .then(data => {
-    const todayOmer = data.items.find(item => {
-      const pubDate = new Date(item.pubDate);
-      const today = new Date();
-      return pubDate.toDateString() === today.toDateString();
-    });
-    if (todayOmer) {
-      document.getElementById('omer-section').style.display = 'block';
-      document.getElementById('omer-count').textContent = todayOmer.title;
-    }
-  });
-    
+    // Omer Feed (conditional display)
+    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
+      .then(response => response.json())
+      .then(data => {
+        const todayOmer = data.items.find(item => {
+          const pubDate = new Date(item.pubDate);
+          const today = new Date();
+          return pubDate.toDateString() === today.toDateString();
+        });
+        if (todayOmer) {
+          document.getElementById('omer-section').style.display = 'block';
+          document.getElementById('omer-count').textContent = todayOmer.title;
+        }
+      });
+
     // Candle Lighting (only show on Fridays)
     if (today.getDay() === 5) {
       document.getElementById('candle-section').style.display = 'block';
