@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Daily Torah Feed</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -26,7 +25,7 @@
       background: white;
       padding: 1.5rem;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     }
 
     h2 {
@@ -64,10 +63,8 @@
     }
   </style>
 </head>
-
 <body>
   <div class="container">
-
     <!-- Date & Time Section -->
     <div class="section">
       <h2>Current Date & Time</h2>
@@ -79,7 +76,7 @@
     <!-- Rambam Study -->
     <div class="section">
       <h2>Rambam Daily Study</h2>
-      <ul id="rambam-feed"></ul>
+      <ul id="rambam-feed"><li>Loading...</li></ul>
     </div>
 
     <!-- Omer Counter -->
@@ -94,6 +91,8 @@
       <div id="candle-lighting-time">Loading...</div>
     </div>
   </div>
+
+  <div class="footer">Site powered by GitHub Pages • Built with ❤️</div>
 
   <script>
     // 12-hour Clock
@@ -114,54 +113,64 @@
     document.getElementById('gregorian-date').textContent = today.toDateString();
 
     const pad2 = (n) => n.toString().padStart(2, '0');
-    const isoDate = `${today.getFullYear()}-${pad2(today.getMonth() + 1)}-${pad2(today.getDate())}`;
-    fetch(`https://www.hebcal.com/converter?cfg=json&gy=${today.getFullYear()}&gm=${today.getMonth()+1}&gd=${today.getDate()}&g2h=1`)
+    fetch(`https://www.hebcal.com/converter?cfg=json&gy=${today.getFullYear()}&gm=${today.getMonth() + 1}&gd=${today.getDate()}&g2h=1`)
       .then(res => res.json())
       .then(data => {
-        document.getElementById('hebrew-date').textContent = `${data.hebrew}`;
+        document.getElementById('hebrew-date').textContent = data.hebrew;
       });
 
-    // Rambam Feed from Full Daily Study RSS
-  fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/rambam.xml')
-  .then(response => response.json())
-  .then(data => {
-    const list = document.getElementById('rambam-feed');
-    data.items.forEach(item => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="${item.link}" target="_blank">${item.title} - ${item.description}</a>`;
-      list.appendChild(li);
-    });
-  });
+    // Rambam Feed from Daily Study
+    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/dailystudy.xml')
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById('rambam-feed');
+        list.innerHTML = '';
+        const rambamItems = data.items.filter(item =>
+          item.title.toLowerCase().includes("rambam")
+        );
 
-    // Omer Feed (conditional display)
+        if (rambamItems.length === 0) {
+          list.innerHTML = '<li>No Rambam study available today.</li>';
+        } else {
+          rambamItems.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${item.link}" target="_blank">${item.title} - ${item.description}</a>`;
+            list.appendChild(li);
+          });
+        }
+      })
+      .catch(err => {
+        document.getElementById('rambam-feed').innerHTML = '<li>Failed to load Rambam study.</li>';
+        console.error('Rambam feed error:', err);
+      });
 
-fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
-  .then(response => response.json())
-  .then(data => {
-    const today = new Date();
-    const todayDate = today.getDate();
-    const todayMonth = today.getMonth();
+    // Omer Feed - show only on applicable days
+    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
+      .then(response => response.json())
+      .then(data => {
+        const today = new Date();
+        const todayDate = today.getDate();
+        const todayMonth = today.getMonth();
 
-    const match = data.items.find(item => {
-      const itemDate = new Date(item.pubDate);
-      return (
-        itemDate.getDate() === todayDate &&
-        itemDate.getMonth() === todayMonth
-      );
-    });
+        const match = data.items.find(item => {
+          const itemDate = new Date(item.pubDate);
+          return (
+            itemDate.getDate() === todayDate &&
+            itemDate.getMonth() === todayMonth
+          );
+        });
 
-    if (match && /day \d+/i.test(match.title)) {
-      document.getElementById('omer-section').style.display = 'block';
-      document.getElementById('omer-count').textContent = match.title;
-    }
-  });
-
+        if (match && /day \d+/i.test(match.title)) {
+          document.getElementById('omer-section').style.display = 'block';
+          document.getElementById('omer-count').textContent = match.title;
+        }
+      });
 
     // Candle Lighting (only show on Fridays)
     if (today.getDay() === 5) {
       document.getElementById('candle-section').style.display = 'block';
-      const locationId = '90035'; // Beverly Hills
-      const url = `https://www.hebcal.com/shabbat?cfg=json&geo=zip&zip=${locationId}&m=50`;
+      const zip = '90035'; // Customize if needed
+      const url = `https://www.hebcal.com/shabbat?cfg=json&geo=zip&zip=${zip}&m=50`;
       fetch(url)
         .then(response => response.json())
         .then(data => {
