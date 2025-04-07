@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Daily Torah Feed</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,6 +12,7 @@
       margin: 0;
       padding: 2rem;
     }
+
     .container {
       max-width: 900px;
       margin: auto;
@@ -19,35 +20,42 @@
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
     }
+
     .section {
       background: white;
       padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
+
     h2 {
       margin-top: 0;
       color: #1026cc;
       font-size: 1.3rem;
     }
+
     ul {
       list-style: none;
       padding-left: 0;
     }
+
     .date {
       font-size: 1.2rem;
       margin-bottom: 1rem;
     }
+
     .clock {
       font-size: 2rem;
       margin-top: 0.5rem;
     }
+
     .footer {
       text-align: center;
       margin-top: 3rem;
       font-size: 0.9rem;
       color: #888;
     }
+
     @media (max-width: 768px) {
       .container {
         grid-template-columns: 1fr;
@@ -55,10 +63,8 @@
     }
   </style>
 </head>
-
 <body>
   <div class="container">
-
     <!-- Date & Time Section -->
     <div class="section">
       <h2>Current Date & Time</h2>
@@ -86,11 +92,12 @@
     </div>
 
     <!-- Zmanim -->
-    <div class="section">
-      <h2>Today's Zmanim</h2>
-      <ul id="zmanim-list"><li>Loading...</li></ul>
+    <div class="section" id="zmanim-section">
+      <h2>Zmanim</h2>
+      <ul id="zmanim-list">
+        <li>Loading times...</li>
+      </ul>
     </div>
-
   </div>
 
   <script>
@@ -107,89 +114,91 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Gregorian Date
+    // Gregorian + Hebrew Date
     const today = new Date();
     document.getElementById('gregorian-date').textContent = today.toDateString();
 
-    // Hebrew Date
     const pad2 = (n) => n.toString().padStart(2, '0');
     fetch(`https://www.hebcal.com/converter?cfg=json&gy=${today.getFullYear()}&gm=${today.getMonth()+1}&gd=${today.getDate()}&g2h=1`)
       .then(res => res.json())
       .then(data => {
-        document.getElementById('hebrew-date').textContent = data.hebrew;
+        document.getElementById('hebrew-date').textContent = `${data.hebrew}`;
       });
 
-    // Rambam Feed
-    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/rambam.xml')
-      .then(response => response.json())
-      .then(data => {
+    // Rambam Feed (parse XML manually)
+    fetch('https://www.chabad.org/tools/rss/dailystudy.xml')
+      .then(res => res.text())
+      .then(str => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(str, "text/xml");
+        const items = Array.from(xml.querySelectorAll("item"));
+        const rambamItems = items.filter(item => item.querySelector("title").textContent.toLowerCase().includes("rambam"));
         const list = document.getElementById('rambam-feed');
         list.innerHTML = '';
-        if (!data.items) {
-          list.innerHTML = '<li>Could not load Rambam feed.</li>';
-          return;
+
+        if (rambamItems.length === 0) {
+          list.innerHTML = '<li>No Rambam found for today.</li>';
+        } else {
+          rambamItems.forEach(item => {
+            const title = item.querySelector("title").textContent;
+            const link = item.querySelector("link").textContent;
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="${link}" target="_blank">${title}</a>`;
+            list.appendChild(li);
+          });
         }
-        data.items.forEach(item => {
-          const li = document.createElement('li');
-          li.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
-          list.appendChild(li);
-        });
       })
-      .catch(error => {
-        document.getElementById('rambam-feed').innerHTML = '<li>Error loading Rambam feed.</li>';
-        console.error("Rambam feed error:", error);
+      .catch(err => {
+        console.error("Rambam feed error:", err);
+        document.getElementById('rambam-feed').innerHTML = '<li>Error loading Rambam.</li>';
       });
 
-    // Omer Counter
+    // Omer Feed (conditional display)
     fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
         const todayStr = new Date().toDateString();
-        const todayItem = data.items.find(item =>
-          new Date(item.pubDate).toDateString() === todayStr
-        );
-
-        if (todayItem) {
+        const match = data.items.find(item => {
+          const date = new Date(item.pubDate);
+          return date.toDateString() === todayStr;
+        });
+        if (match && match.title.toLowerCase().includes('day')) {
           document.getElementById('omer-section').style.display = 'block';
-          document.getElementById('omer-count').textContent = todayItem.title;
+          document.getElementById('omer-count').textContent = match.title;
         }
-      })
-      .catch(console.error);
+      });
 
-    // Candle Lighting (only on Fridays)
+    // Candle Lighting (Fridays only)
     if (today.getDay() === 5) {
       document.getElementById('candle-section').style.display = 'block';
-      const zip = '90035'; // LA
+      const zip = '90035';
       fetch(`https://www.hebcal.com/shabbat?cfg=json&geo=zip&zip=${zip}&m=50`)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
           const candleEvent = data.items.find(item => item.category === "candles");
-          if (candleEvent) {
-            document.getElementById('candle-lighting-time').textContent = candleEvent.title;
-          } else {
-            document.getElementById('candle-lighting-time').textContent = "No candle lighting today.";
-          }
+          document.getElementById('candle-lighting-time').textContent = candleEvent ? candleEvent.title : "No candle lighting time today.";
         });
     }
 
-    // Zmanim Feed (Latest Shema, Sunset, Nightfall)
-    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/zmanim.xml?locationId=90035&locationType=2')
+    // Zmanim Section
+    fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/zmanim.xml')
       .then(res => res.json())
       .then(data => {
-        const zmanimList = document.getElementById('zmanim-list');
-        zmanimList.innerHTML = '';
-        if (!data.items) return;
-
-        const importantZmanim = ['Latest Shema', 'Sunset', 'Nightfall'];
+        const list = document.getElementById('zmanim-list');
+        list.innerHTML = '';
+        const keywords = ["Latest Shema", "Sunset", "Nightfall"];
         data.items.forEach(item => {
-          if (importantZmanim.some(label => item.title.includes(label))) {
+          if (keywords.some(kw => item.title.includes(kw))) {
             const li = document.createElement('li');
             li.textContent = item.title;
-            zmanimList.appendChild(li);
+            list.appendChild(li);
           }
         });
       })
-      .catch(console.error);
+      .catch(err => {
+        console.error("Zmanim fetch failed:", err);
+        document.getElementById('zmanim-list').innerHTML = '<li>Error loading zmanim.</li>';
+      });
   </script>
 </body>
 </html>
