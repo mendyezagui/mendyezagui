@@ -125,34 +125,6 @@
         document.getElementById('hebrew-date').textContent = `${data.hebrew}`;
       });
 
-    // Rambam Feed (parse XML manually)
-    fetch('https://www.chabad.org/tools/rss/dailystudy.xml')
-      .then(res => res.text())
-      .then(str => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(str, "text/xml");
-        const items = Array.from(xml.querySelectorAll("item"));
-        const rambamItems = items.filter(item => item.querySelector("title").textContent.toLowerCase().includes("rambam"));
-        const list = document.getElementById('rambam-feed');
-        list.innerHTML = '';
-
-        if (rambamItems.length === 0) {
-          list.innerHTML = '<li>No Rambam found for today.</li>';
-        } else {
-          rambamItems.forEach(item => {
-            const title = item.querySelector("title").textContent;
-            const link = item.querySelector("link").textContent;
-            const li = document.createElement("li");
-            li.innerHTML = `<a href="${link}" target="_blank">${title}</a>`;
-            list.appendChild(li);
-          });
-        }
-      })
-      .catch(err => {
-        console.error("Rambam feed error:", err);
-        document.getElementById('rambam-feed').innerHTML = '<li>Error loading Rambam.</li>';
-      });
-
     // Omer Feed (conditional display)
     fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.chabad.org/tools/rss/omer_rss.xml')
       .then(res => res.json())
