@@ -9,53 +9,76 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #f4f4f9;
+      background-color: #ffffff;
       color: #333;
-      line-height: 1.6;
     }
     header {
-      background-color: #4A90E2;
+      background: linear-gradient(to right, #4A90E2, #50E3C2);
       color: white;
-      padding: 60px 20px;
+      padding: 80px 20px;
       text-align: center;
     }
     header h1 {
-      font-size: 3em;
-      margin-bottom: 0.3em;
+      font-size: 3.5em;
+      margin-bottom: 0.2em;
     }
     header p {
-      font-size: 1.2em;
+      font-size: 1.3em;
+      margin-bottom: 1em;
     }
     .cta {
       background: white;
+      color: #4A90E2;
       border: none;
-      padding: 12px 24px;
+      padding: 14px 28px;
       font-size: 1em;
       font-weight: bold;
-      color: #4A90E2;
-      border-radius: 6px;
-      margin-top: 20px;
-      cursor: pointer;
+      border-radius: 30px;
       text-decoration: none;
-      display: inline-block;
+      transition: background 0.3s;
+    }
+    .cta:hover {
+      background: #e6f2ff;
     }
     section {
-      padding: 40px 20px;
-      max-width: 800px;
+      padding: 60px 20px;
+      max-width: 1000px;
       margin: auto;
+    }
+    section h2 {
+      font-size: 2.2em;
+      color: #4A90E2;
+      margin-bottom: 0.5em;
+    }
+    section p {
+      font-size: 1.1em;
+      margin-bottom: 2em;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .feature img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .feature-text {
+      flex: 1;
     }
     footer {
       text-align: center;
-      padding: 20px;
-      background-color: #e0e0e0;
+      padding: 30px;
+      background-color: #f0f0f0;
       font-size: 0.9em;
     }
-    .feature {
-      margin-bottom: 20px;
-    }
-    .feature h3 {
-      margin-bottom: 0.5em;
+    footer a {
       color: #4A90E2;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -73,16 +96,27 @@
 
   <section>
     <div class="feature">
-      <h3>🍽️ Meal Tracking</h3>
-      <p>Use the food exchange system to log your meals and understand if you’re on target, over, or under for the day.</p>
+      <img src="https://via.placeholder.com/300x200.png?text=Meal+Tracking" alt="Meal Tracking">
+      <div class="feature-text">
+        <h2>🍽️ Meal Tracking</h2>
+        <p>Use the food exchange system to log your meals and understand if you’re on target, over, or under for the day.</p>
+      </div>
     </div>
+
     <div class="feature">
-      <h3>🧠 Mental Check-Ins</h3>
-      <p>Log your thoughts, work through emotions, and use grounding prompts to stay centered.</p>
+      <img src="https://via.placeholder.com/300x200.png?text=Mental+Check-In" alt="Mental Check-In">
+      <div class="feature-text">
+        <h2>🧠 Mental Check-Ins</h2>
+        <p>Log your thoughts, work through emotions, and use grounding prompts to stay centered and supported throughout your day.</p>
+      </div>
     </div>
+
     <div class="feature">
-      <h3>⚡ Real-Time AI Feedback</h3>
-      <p>Get personalized feedback and ideas for your next meal—or moment of peace.</p>
+      <img src="https://via.placeholder.com/300x200.png?text=Real-Time+Feedback" alt="Real-Time Feedback">
+      <div class="feature-text">
+        <h2>⚡ Real-Time AI Feedback</h2>
+        <p>Get personalized suggestions and support instantly—whether you're unsure about your next meal or need a mental boost.</p>
+      </div>
     </div>
   </section>
 
