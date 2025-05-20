@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriMind AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #4A90E2;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 0.3em;
+    }
+    header p {
+      font-size: 1.2em;
+    }
+    .cta {
+      background: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      font-weight: bold;
+      color: #4A90E2;
+      border-radius: 6px;
+      margin-top: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    section {
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #e0e0e0;
+      font-size: 0.9em;
+    }
+    .feature {
+      margin-bottom: 20px;
+    }
+    .feature h3 {
+      margin-bottom: 0.5em;
+      color: #4A90E2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>NutriMind AI</h1>
+    <p>Fuel your body. Free your mind.</p>
+    <a class="cta" href="https://chatgpt.com/share/6810d06b-4238-8003-9df4-5ca968218691" target="_blank">Try the AI →</a>
+  </header>
+
+  <section>
+    <h2>What is NutriMind AI?</h2>
+    <p>NutriMind AI is your personal wellness assistant, combining smart nutrition tracking with supportive mental health reflections. Whether you want to plan balanced meals or process a stressful day, NutriMind is here to guide you through it—instantly and intelligently.</p>
+  </section>
+
+  <section>
+    <div class="feature">
+      <h3>🍽️ Meal Tracking</h3>
+      <p>Use the food exchange system to log your meals and understand if you’re on target, over, or under for the day.</p>
+    </div>
+    <div class="feature">
+      <h3>🧠 Mental Check-Ins</h3>
+      <p>Log your thoughts, work through emotions, and use grounding prompts to stay centered.</p>
+    </div>
+    <div class="feature">
+      <h3>⚡ Real-Time AI Feedback</h3>
+      <p>Get personalized feedback and ideas for your next meal—or moment of peace.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Mendy Ezagui | <a href="https://github.com/mendyezagui" target="_blank">GitHub</a> • <a href="https://www.linkedin.com/in/mendyezagui/" target="_blank">LinkedIn</a></p>
+  </footer>
+</body>
+</html>
